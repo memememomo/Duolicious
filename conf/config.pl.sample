@@ -1,0 +1,11 @@
++{
+   'DBI' => [
+        'dbi:mysql:duolicious;mysql_socket=/tmp/mysql.sock',
+        '',
+        '',
+        {
+            mysql_enable_utf8   => 1,
+            RaiseError          => 0,
+        },
+    ],
+};

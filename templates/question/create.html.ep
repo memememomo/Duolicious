@@ -1,0 +1,39 @@
+% layout "default";
+
+<h1>Section<%= $section %> - 問題登録</h1>
+<div>
+  <form action="<%= url_for('question/edit') %>" method="post">
+    <table>
+      <tr>
+	<th>No.</th>
+	<td><input type="text" name="number" size="4" /></td>
+      </tr>
+      <% for my $q ( @{ $questions } ) { %>
+      <tr>
+	<td colspan="2">
+	  <table>
+	    <tr>
+	      <td align="right">日本語<%= $q->{no} %></td>
+	      <td><input type="text" name="japanese_<%= $q->{no} %>" /></td>
+	    </tr>
+	    <tr>
+	      <td align="right">英語<%= $q->{no} %></td>
+	      <td><input type="text" name="english_<%= $q->{no} %>" /></td>
+	    </tr>
+	  </table>
+	</td>
+	<td>
+	  <input type="submit" name="delete_<%= $q->{no} %>" value="削除" />
+	</td>
+      </tr>
+    <% } %>
+      <tr>
+	<td colspan="3">
+	  <input type="submit" name="add" value="追加" />
+	</td>
+      </tr>
+    </table>
+    <input type="button" name="back" value="戻る" onclick="location.href='<%= url_for('question/list') %>'" />
+    <input type="submit" name="create" value="登録" />
+  </form>
+</div>

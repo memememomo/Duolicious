@@ -1,0 +1,24 @@
+% layout 'default';
+
+<h1>Section<%= $section %> - 問題一覧</h1>
+
+<input type="button" value="登録" onclick="location.href='<%= url_for('question/create') %>';" />
+
+<table>
+  <tr>
+    <th>No.</th>
+    <th>問題文</th>
+    <th>編集</th>
+    <th>削除</th>
+  </tr>
+% for my $q ( @{ $questions } ) {
+  <tr>
+    <td><%= $q->{number} %></td>
+    <td><%= $q->{japanese} %></td>
+    <td><a href="<%= url_for('question/edit', section => $section, id => $q->{id}) %>">編集</a></td>
+    <td><a href="">削除</a></td>
+  </tr>
+% }
+</table>
+
+<input type="button" value="戻る" onclick="location.href='<%= url_for('section/index') %>';" />

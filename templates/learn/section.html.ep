@@ -1,0 +1,14 @@
+% layout "default";
+
+<h1>セクション選択</h1>
+<p>覚えるセクションを選択してください。</p>
+<table>
+  <tr>
+  <% my $counter = 1; %>
+  <% for my $section ( 1 .. 45 ) { %>
+    <td><a href="<%= url_for('learn/start', section => $section) %>">Section<%= $section %></a></td>
+  <% if ( $counter++ % 15 == 0 ) { %></tr><tr><% } %>
+  <% } %>
+  </tr>
+</table>
+<input type="button" value="戻る" onclick="location.href='<%= url_for('index') %>'" />

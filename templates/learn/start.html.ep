@@ -1,0 +1,52 @@
+% layout "default";
+
+<script type="text/javascript">
+  $(document).ready(function() {
+      $("#answer").css("display", "none");
+      $("#show_answer").click(function() {
+          $("#answer").toggle();
+      });
+  });
+</script>
+
+<h1>Section<%= $section %> - No.<%= $no %></h1>
+
+<hr/>
+% if ( $error )  {
+<span style="color:#f00">間違えがあります。</span>
+<hr/>
+% }
+
+<div id="japanese">
+% for my $j ( @{ $japanese } ) {
+   <h2><%= $j->{no} %></h2>
+   <div class="sentence"><%= $j->{str} %></div>
+   <hr/>
+% }
+</div>
+
+<div id="english">
+  <form action="<%= url_for('learn/start') %>" method="post">
+% for my $e ( @{ $english } ) {
+     <h2><%= $e->{no} %></h2>
+     <div class="sentence">
+% for my $f ( @{ $e->{forms} } ) {
+       <input type="text" name="ans_<%= $e->{no} %>_<%= $f->{word_no} %>" />&nbsp;
+% }
+     </div>
+     <hr />
+% }
+     <input type="submit" value="解答" />
+
+     <br />
+     <br />
+     <h5 id="show_answer">答えを見る</h5>
+     <div id="answer">
+% for my $e ( @{ $english } ) {
+	<%= $e->{str} %><br />
+% }
+     </div>
+  </form>
+</div>
+
+<input type="button" name="back" value="戻る" onclick="location.href='<%= url_for('learn/section') %>'" />

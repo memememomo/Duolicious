@@ -1,0 +1,7 @@
+--- 
+- 
+  data: "CREATE TABLE `question` (\n  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,\n  `english` text NOT NULL,\n  `japanese` text NOT NULL,\n  `section` int(11) unsigned NOT NULL,\n  `updated_at` datetime NOT NULL,\n  `created_at` datetime NOT NULL,\n  PRIMARY KEY (`id`)\n) ENGINE=InnoDB DEFAULT CHARSET=utf8"
+  schema: question
+- 
+  data: "CREATE TABLE `section` (\n  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,\n  `number` int(10) unsigned NOT NULL,\n  `updated_at` datetime NOT NULL,\n  `created_at` datetime NOT NULL,\n  PRIMARY KEY (`id`)\n) ENGINE=InnoDB DEFAULT CHARSET=utf8"
+  schema: section
