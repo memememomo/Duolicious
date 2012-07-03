@@ -144,7 +144,7 @@ any '/question/edit/:section/:id' => sub {
     }
     $filled{"number"} ||= $question->number;
 
-    my $max_no = 1;
+    my $max_no = $length;
     my $del_no = -1;
     for my $name ( keys %params ) {
         if ( $name =~ /^japanese_(\d+)$/ ) {

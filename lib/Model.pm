@@ -117,7 +117,12 @@ sub _create_question_forms {
 sub get_next_no {
     my ($app, $section, $no) = @_;
     my $num = $app->db->count('question', '*', { section => $section }, { order_by => 'number' });
-    return ($no + 1) % ($num + 1);
+    return Model::_get_next_no($no, $num);
+}
+
+sub _get_next_no {
+    my ($cur, $max) = @_;
+    return $cur % $max + 1;
 }
 
 sub check_ans {

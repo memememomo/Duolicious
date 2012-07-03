@@ -38,4 +38,14 @@ subtest 'フォーム作成のために文章を分解' => sub {
     is @{ $e_ref->[1]->{forms} }, 7;
 };
 
+subtest '次の問題の番号を取得' => sub {
+    my $t = Test::Mojo->new;
+
+    my $max = 10;
+
+    is Model::_get_next_no(1, $max), 2;
+    is Model::_get_next_no(9, $max), 10;
+    is Model::_get_next_no(10, $max), 1;
+};
+
 done_testing();

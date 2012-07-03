@@ -2,7 +2,7 @@
 
 <h1>Section<%= $section %> - 問題登録</h1>
 <div>
-  <form action="<%= url_for('question/edit') %>" method="post">
+  <form action="<%= url_for('question/create') %>" method="post">
     <table>
       <tr>
 	<th>No.</th>
