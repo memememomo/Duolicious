@@ -1,11 +1,43 @@
 % layout "default";
 
+<script type="text/javascript" src="/static/js/shortcut.js"></script>
+
 <script type="text/javascript">
   $(document).ready(function() {
+
+      shortcut.add("Ctrl+1", function() {
+          $("#answer").toggle();
+      });
+
+      shortcut.add("Ctrl+b", function() {
+           var id = $(":focus").attr("id");
+
+           if ( ! id ) { return ; }
+
+           var result = id.match(/ans_([0-9]+)_([0-9]+)/);
+           var no1 = RegExp.$1;
+           var no2 = RegExp.$2;
+
+           if ( no2 - 1 <= 0 ) {
+               no1 -= 1;
+               no2 = 1;
+           }
+           else if ( no2 - 1 >= 1 ) {
+               no2 -= 1;
+           }
+
+           if ( no1 >= 1 && no2 >= 1 ) {
+               $("#ans_" + no1 + "_" + no2).focus();
+           }
+      });
+
       $("#answer").css("display", "none");
       $("#show_answer").click(function() {
           $("#answer").toggle();
       });
+
+      $("#ans_<%= $english->[0]->{no} %>_<%= $english->[0]->{forms}->[0]->{word_no} %>").focus();
+
   });
 </script>
 
@@ -31,7 +63,7 @@
      <h2><%= $e->{no} %></h2>
      <div class="sentence">
 % for my $f ( @{ $e->{forms} } ) {
-       <input type="text" name="ans_<%= $e->{no} %>_<%= $f->{word_no} %>" />&nbsp;
+     <input type="text" id="ans_<%= $e->{no} %>_<%= $f->{word_no} %>" name="ans_<%= $e->{no} %>_<%= $f->{word_no} %>" />&nbsp;
 % }
      </div>
      <hr />
