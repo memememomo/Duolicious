@@ -123,6 +123,7 @@ subtest '問題登録処理' => sub {
     my $section = 1;
 
     my %values;
+    $values{number} = 1;
     for my $no ( 1 .. 3 ) {
         $values{"japanese_$no"} = "テスト$no";
         $values{"english_$no"} = "test$no";

@@ -25,9 +25,9 @@ sub max_no {
 }
 
 sub question_submit {
-    my $self = shift;
+    my $app = shift;
 
-    my %params = %{ $self->req->params->to_hash };
+    my %params = %{ $app->req->params->to_hash };
 
     my $max_no = Model::max_no(%params);
 
@@ -37,25 +37,25 @@ sub question_submit {
     my @japanese_list;
     my @english_list;
     for my $no ( 1 .. $max_no ) {
-        push @japanese_list, $self->param("japanese_" . $no);
-        push @english_list, $self->param("english_" . $no);
+        push @japanese_list, $app->param("japanese_" . $no);
+        push @english_list, $app->param("english_" . $no);
     }
     my %values = (
-        number  => $self->param('number'),
-        section => $self->param('section'),
-        japanese => $parser->encode(\@japanese_list),
-        english => $parser->encode(\@english_list),
+        'number'   => $app->param('number'),
+        'section'  => $app->param('section'),
+        'japanese' => $parser->encode(\@japanese_list),
+        'english'  => $parser->encode(\@english_list),
     );
 
-    my $id = $self->param('id') || undef;
+    my $id = $app->param('id') || undef;
     if ( !$id ) {
-        $self->db->insert('question', \%values);
+        $app->db->insert('question', \%values);
     }
     else {
-        $self->db->update('question', \%values, { id => $id });
+        $app->db->update('question', \%values, { id => $id });
     }
 
-    return $self->redirect_to('question/list');
+    return $app->redirect_to('question/list');
 }
 
 sub create_question_forms {
