@@ -1,13 +1,8 @@
-% layout "default";
+% layout "default", h1 => 'セクション一覧';
 
-<h1>セクション一覧</h1>
-<table>
-  <tr>
-  <% my $counter = 1; %>
-  <% for my $section ( 1 .. 45 ) { %>
-    <td><a href="<%= url_for('question/list', section => $section) %>">Section<%= $section %></a></td>
-  <% if ( $counter++ % 15 == 0 ) { %></tr><tr><% } %>
-  <% } %>
-  </tr>
-</table>
-<input type="button" value="戻る" onclick="location.href='<%= url_for('index') %>'" />
+<div class="tabbable tabs-left">
+%= include 'section_menu'
+  <div class="tab-content">
+    <h2>左メニューからsectionを選んで下さい。</h2>
+  </div>
+</div>

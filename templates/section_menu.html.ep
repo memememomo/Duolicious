@@ -1,0 +1,5 @@
+<ul class="nav nav-tabs">
+  <% for my $section ( 1 .. 45 ) { %>
+  <li<% if ( param('section') eq $section ) { %> class="active"<% } %>><a href="<%= url_for('question/list', section => $section) %>">Section<%= $section %></a></li>
+  <% } %>
+</ul>

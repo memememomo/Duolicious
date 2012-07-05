@@ -76,7 +76,7 @@ subtest '問題新規登録画面' => sub {
 
     $t->get_ok('/question/create/' . $section)
       ->status_is(200)
-      ->content_like(qrU("Section$section - 問題登録"))
+      ->content_like(qrU("問題登録 - Section$section"))
       ->content_like(qrU("日本語$section"))
       ->content_like(qrU("英語$section"));
 

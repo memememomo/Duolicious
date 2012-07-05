@@ -1,7 +1,6 @@
-% layout "default";
+% layout "default", h1 => '暗記中';
 
 <script type="text/javascript" src="/static/js/shortcut.js"></script>
-
 <script type="text/javascript">
   $(document).ready(function() {
 
@@ -41,11 +40,15 @@
   });
 </script>
 
-<h1>Section<%= $section %> - No.<%= $no %></h1>
+<div class="tabbable tabs-left">
+%= include 'section_menu2'
 
-<hr/>
+<div class="tab-content">
+  <h2>Section<%= $section %> - No.<%= $no %></h2>
+
+  <hr/>
 % if ( $error )  {
-<span style="color:#f00">間違えがあります。</span>
+  <span style="color:#f00">間違えがあります。</span>
 <hr/>
 % }
 
@@ -80,5 +83,4 @@
      </div>
   </form>
 </div>
-
-<input type="button" name="back" value="戻る" onclick="location.href='<%= url_for('learn/section') %>'" />
+</div>

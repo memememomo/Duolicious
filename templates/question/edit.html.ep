@@ -1,9 +1,11 @@
-% layout "default";
+% layout "default", h1 => '問題編集';
 
-<h1>Section<%= $section %> - 問題編集</h1>
-<div>
+<div class="tabbable tabs-left">
+%= include 'section_menu'
+<div class="tab-content">
+  <h2>問題編集 - Section<%= $section %></h2>
   <form action="<%= url_for('question/edit') %>" method="post">
-    <table>
+    <table class="table table-bordered">
       <tr>
 	<th>No.</th>
 	<td><input type="text" name="number" size="4" /></td>
@@ -11,7 +13,7 @@
       <% for my $q ( @{ $questions } ) { %>
       <tr>
 	<td colspan="2">
-	  <table>
+	  <table class="table table-bordered">
 	    <tr>
 	      <td align="right">日本語<%= $q->{no} %></td>
 	      <td><input type="text" name="japanese_<%= $q->{no} %>" /></td>

@@ -65,6 +65,11 @@ sub create_question_forms {
 
     my @questions = $app->db->search('question', { section => $section }, { order_by => 'number' });
     my $question = $questions[$no-1];
+
+    if ( ! $question ) {
+        return 0;
+    }
+
     my @japanese = @{ $parser->decode( encode_utf8( $question->japanese ) ) };
     my @english  = @{ $parser->decode( encode_utf8( $question->english ) ) };
 
@@ -75,6 +80,8 @@ sub create_question_forms {
     $app->stash->{no} = $no;
 
     $app->stash->{errors} = 0;
+
+    return 1;
 }
 
 sub _create_question_forms {

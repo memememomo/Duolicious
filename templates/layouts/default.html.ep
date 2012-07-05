@@ -7,6 +7,23 @@
     <script type="text/javascript" src="/static/js/jquery.min.js"></script>
   </head>
   <body>
-    <%= content %>
+    <div class="navbar navbar-fixed-top">
+      <div class="navbar-inner">
+	<a class="brand" href="<%= url_for('/') %>">Duolicious</a>
+	<ul class="nav">
+	  <li><a href="<%= url_for('learn/section') %>">暗記</a></li>
+	  <li><a href="<%= url_for('section/index') %>">問題登録</a></li>
+	  <li><a href="">ログ閲覧</a></li>
+	</ul>
+      </div>
+    </div>
+    <div class="container">
+      <header>
+% if ( $h1 ) {
+         <h1><%= $h1 %></h1>
+% }
+      </header>
+      <%= content %>
+    </div>
   </body>
 </html>

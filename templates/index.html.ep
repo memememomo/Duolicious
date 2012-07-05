@@ -1,9 +1,2 @@
-% layout "default";
-
-<h1>Duolicious</h1>
-<ul>
-  <li><a href="<%= url_for('learn/section') %>">暗記</a></li>
-  <li><a href="<%= url_for('section/index') %>">問題登録</a></li>
-  <li><a href="">ログ閲覧</a></li>
-</ul>
+% layout "default", h1 => 'Duolicious';
 
