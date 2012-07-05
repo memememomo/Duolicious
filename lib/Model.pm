@@ -66,22 +66,20 @@ sub create_question_forms {
     my @questions = $app->db->search('question', { section => $section }, { order_by => 'number' });
     my $question = $questions[$no-1];
 
-    if ( ! $question ) {
-        return 0;
+    $app->stash->{japanese} = [];
+    $app->stash->{english} = [];
+    if ( $question ) {
+        my @japanese = @{ $parser->decode( encode_utf8( $question->japanese ) ) };
+        my @english  = @{ $parser->decode( encode_utf8( $question->english ) ) };
+
+        my ($j_ref, $e_ref) = Model::_create_question_forms(\@japanese, \@english);
+        $app->stash->{japanese} = $j_ref;
+        $app->stash->{english} = $e_ref;
     }
-
-    my @japanese = @{ $parser->decode( encode_utf8( $question->japanese ) ) };
-    my @english  = @{ $parser->decode( encode_utf8( $question->english ) ) };
-
-    my ($j_ref, $e_ref) = Model::_create_question_forms(\@japanese, \@english);
-    $app->stash->{japanese} = $j_ref;
-    $app->stash->{english} = $e_ref;
 
     $app->stash->{no} = $no;
 
     $app->stash->{errors} = 0;
-
-    return 1;
 }
 
 sub _create_question_forms {

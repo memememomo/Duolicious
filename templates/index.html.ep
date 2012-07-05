@@ -1,2 +1,21 @@
-% layout "default", h1 => 'Duolicious';
+% layout "default", h1 => '';
 
+<div class="hero-unit">
+  <h1>Duolicious</h1>
+  <p>Duoliciousは、DUOの例文を覚えるためのツールです。英文と日本文を問題として登録できます。</p>
+</div>
+
+<div class="row">
+  <div class="span4">
+    <h3>暗記</h3>
+    登録した問題で暗記します。日本語が表示されるので、１つのテキストフォームに１つの単語を入力していきます。
+  </div>
+  <div class="span4">
+    <h3>登録</h3>
+    問題を登録するページです。日本語と英語を入力して問題を作成して下さい。
+  </div>
+  <div class="span4">
+    <h3>ログ閲覧</h3>
+    正解率や暗記した記録が閲覧できます。
+  </div>
+</div>

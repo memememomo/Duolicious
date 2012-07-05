@@ -3,6 +3,7 @@
 <div class="tabbable tabs-left">
 %= include 'section_menu'
   <div class="tab-content">
-    <h2>左メニューからsectionを選んで下さい。</h2>
+    <h2>問題登録</h2>
+    <p>左メニューからsectionを選んで下さい。</p>
   </div>
 </div>

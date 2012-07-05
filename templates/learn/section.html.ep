@@ -4,5 +4,6 @@
 %= include 'section_menu2'
 
 <div class="tab-content">
-  <h2>覚えるセクションを選択してください。</h2>
+  <h2>暗記</h2>
+  <p>覚えるセクションを選択してください。</p>
 </div>
