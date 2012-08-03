@@ -1,4 +1,4 @@
-% layout "default", h1 => '暗記中';
+% layout "default", h1 => '復習';
 
 <script type="text/javascript" src="/static/js/shortcut.js"></script>
 <script type="text/javascript">
@@ -47,10 +47,8 @@
   });
 </script>
 
-<div class="tabbable tabs-left">
-%= include 'section_menu2'
 
-<div class="tab-content">
+<div>
   <h2>Section<%= $section %> - No.<%= $no %></h2>
 
   <hr/>
@@ -68,7 +66,10 @@
 </div>
 
 <div id="english">
-  <form action="<%= url_for('learn/start') %>" method="post">
+  <form action="<%= url_for('review/index') %>" method="post">
+     <input type="hidden" name="id" value="<%= $id %>" />
+     <input type="hidden" name="section" value="<%= $section %>" />
+     <input type="hidden" name="no" value="<%= $no %>" />
      <input type="hidden" name="ans_look_count" id="ans_look_count" value="0" />
      <input type="hidden" name="miss_count" value="0" />
 % for my $e ( @{ $english } ) {
@@ -91,5 +92,4 @@
 % }
      </div>
   </form>
-</div>
 </div>

@@ -77,11 +77,18 @@ post '/learn/start/:section/:no' => sub {
     my $no = $self->param('no');
 
     if ( Model::check_ans($self, $section, $no) ) {
+        my $ans_look_count = $self->param('ans_look_count') || 0;
+        my $miss_count     = $self->param('miss_count') || 0;
+        Model::log($self, $section, $no, $ans_look_count, $miss_count);
         my $next_no = Model::get_next_no($self, $section, $no);
         return $self->redirect_to('learn/start', no => $next_no );
     }
 
     my %filled = Model::create_question_forms($self, $section, $no);
+
+    my $miss_count = $self->param('miss_count');
+    $miss_count++;
+    $filled{miss_count} = $miss_count;
 
     $self->render_filled_html(\%filled);
 } => 'learn/start';
@@ -251,6 +258,40 @@ any '/question/create/:section' => sub {
     $self->render_filled_html(\%filled);
 } => 'question/create';
 
+
+any '/review' => sub {
+    my $self = shift;
+
+    my ($id, $section, $no);
+    if ( lc($self->req->method) eq 'post' ) {
+        $id      = $self->param('id');
+        $section = $self->param('section');
+        $no      = $self->param('no');
+
+        if ( Model::check_ans($self, $section, $no) ) {
+            my $ans_look_count = $self->param('ans_look_count') || 0;
+            my $miss_count     = $self->param('miss_count')     || 0;
+            Model::review_log($self, $id, $section, $no, $ans_look_count, $miss_count);
+            return $self->redirect_to('review/index');
+        }
+    }
+    else {
+        my $row = Model::review($self);
+        $id      = $row->{id};
+        $section = $row->{section};
+        $no      = $row->{no};
+    }
+
+    $self->stash->{id}      = $id;
+    $self->stash->{section} = $section;
+    $self->stash->{no}      = $no;
+
+    my %filled = Model::create_question_forms($self, $section, $no);
+
+    $self->stash->{error} = 0;
+
+    $self->render_filled_html(\%filled);
+} => 'review/index';
 
 app->start;
 

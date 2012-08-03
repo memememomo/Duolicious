@@ -4,8 +4,8 @@ use strict;
 use warnings;
 use utf8;
 use Encode;
-
-use Data::Dumper;
+use Time::Piece;
+use Time::Seconds;
 
 use Mojo::JSON;
 
@@ -118,7 +118,6 @@ sub _create_question_forms {
     return (\@japanese, \@english);
 }
 
-
 sub get_next_no {
     my ($app, $section, $no) = @_;
     my $num = $app->db->count('question', '*', { section => $section }, { order_by => 'number' });
@@ -156,7 +155,6 @@ sub check_ans {
             my $word_no = $j + 1;
 
             my $ans = $app->param("ans_${no}_${word_no}");
-            warn "$word, $ans";
             if ( $word ne $ans ) {
                 $app->stash->{error} = 1;
                 return 0;
@@ -165,6 +163,90 @@ sub check_ans {
     }
 
     return 1;
+}
+
+sub log {
+    my ($app, $section, $no, $ans_look_count, $miss_count) = @_;
+
+    $app->db->insert('anslog', {
+        section => $section,
+        no => $no,
+        ans_look_count => $ans_look_count,
+        miss_count => $miss_count,
+        ans_at => \'NOW()',
+    });
+}
+
+sub review {
+    my ($app) = @_;
+
+    my $now = Time::Piece::localtime;
+
+    my $first_review  = $now - ONE_DAY * 1;
+    my $second_review = $first_review - ONE_DAY * 7;
+    my $third_review  = $second_review - ONE_DAY * 30;
+
+    my $builder = $app->db->sql_builder;
+
+    my $format = '%Y-%m-%d %H:%M:%S';
+    my $cond;
+
+    my $base = $builder->new_condition();
+    $base = $base->add(ans_look_count => {'>' => 0});
+
+    $cond = $builder->new_condition();
+    $cond->add(miss_count => {'>' => 1});
+    $base = $base->compose_or($cond);
+
+    $cond = $builder->new_condition();
+    $cond->add(review_count => 0);
+    $cond->add(ans_at => {'<=' => $first_review->strftime($format)});
+    $base = $base->compose_or($cond);
+
+    $cond = $builder->new_condition();
+    $cond->add(review_count => 1);
+    $cond->add(ans_at => {'<=' => $second_review->strftime($format)});
+    $base = $base->compose_or($cond);
+
+    $cond = $builder->new_condition();
+    $cond->add(review_count => 2);
+    $cond->add(ans_at => {'<=' => $second_review->strftime($format)});
+    $base = $base->compose_or($cond);
+
+    my $maker_select = $builder->new_select();
+    $maker_select->add_select('*');
+    $maker_select->add_from('anslog');
+    $maker_select->set_where($base);
+
+    $maker_select->limit(1);
+
+    my $sql = $maker_select->as_sql;
+    my @binds = @{$maker_select->bind};
+    warn $sql;
+    my $dbh = $app->db->dbh;
+    my $sth = $dbh->prepare($sql);
+    $sth->execute(@binds);
+    my $row = $sth->fetchrow_hashref;
+    $sth->finish;
+
+    return $row;
+}
+
+sub review_log {
+    my ($app, $id, $section, $no, $ans_look_count, $miss_count) = @_;
+
+    my $row = $app->db->single('anslog', {id => $id});
+
+    # ミスや解答確認の復習だったら、削除し、新しいログを残す
+    if ( $row->ans_look_count > 0 || $row->miss_count > 1 ) {
+        $row->delete;
+        Model::log($app, $section, $no, $ans_look_count, $miss_count);
+    }
+    # 忘却曲線の復習だったら、カウントアップ
+    else {
+        my $review_count = $row->review_count + 1;
+        $row->update({review_count => $review_count});
+    }
 }
 
 1;

@@ -5,6 +5,12 @@
     <title>Duolicious</title>
     <link rel="stylesheet" type="text/css" href="/static/css/bootstrap.css" />
     <script type="text/javascript" src="/static/js/jquery.min.js"></script>
+    <style type="text/css">
+      body {
+         padding-top: 60px;
+         padding-bottom: 40px;
+      }
+    </style>
   </head>
   <body>
     <div class="navbar navbar-fixed-top">
@@ -12,17 +18,12 @@
 	<a class="brand" href="<%= url_for('/') %>">Duolicious</a>
 	<ul class="nav">
 	  <li><a href="<%= url_for('learn/section') %>">暗記</a></li>
+	  <li><a href="<%= url_for('review/index') %>">復習</a></li>
 	  <li><a href="<%= url_for('section/index') %>">問題登録</a></li>
-	  <li><a href="">ログ閲覧</a></li>
 	</ul>
       </div>
     </div>
     <div class="container">
-      <header>
-% if ( $h1 ) {
-         <h1><%= $h1 %></h1>
-% }
-      </header>
       <%= content %>
     </div>
   </body>
