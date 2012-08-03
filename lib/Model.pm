@@ -168,13 +168,17 @@ sub check_ans {
 sub log {
     my ($app, $section, $no, $ans_look_count, $miss_count) = @_;
 
-    $app->db->insert('anslog', {
-        section => $section,
-        no => $no,
-        ans_look_count => $ans_look_count,
-        miss_count => $miss_count,
-        ans_at => \'NOW()',
-    });
+    my $count = $app->db->count('anslog', '*', { section => $section, no => $no });
+
+    if ( !$count ) {
+        $app->db->insert('anslog', {
+            section => $section,
+            no => $no,
+            ans_look_count => $ans_look_count,
+            miss_count => $miss_count,
+            ans_at => \'NOW()',
+        });
+    }
 }
 
 sub review {
