@@ -11,7 +11,7 @@
           $("#ans_look_count").val(ans_look_count);
       });
 
-      shortcut.add("Ctrl+b", function() {
+      shortcut.add("Ctrl+p", function() {
            var id = $(":focus").attr("id");
 
            if ( ! id ) { return ; }
@@ -56,6 +56,10 @@
   <span style="color:#f00">間違えがあります。</span>
 <hr/>
 % }
+% if ( $review )  {
+  <span style="color:#f00">もう一度です。</span>
+<hr/>
+% }
 
 <div id="japanese">
 % for my $j ( @{ $japanese } ) {
@@ -70,8 +74,8 @@
      <input type="hidden" name="id" value="<%= $id %>" />
      <input type="hidden" name="section" value="<%= $section %>" />
      <input type="hidden" name="no" value="<%= $no %>" />
-     <input type="hidden" name="ans_look_count" id="ans_look_count" value="0" />
-     <input type="hidden" name="miss_count" value="0" />
+     <input type="hidden" name="ans_look_count" id="ans_look_count" value="<%= $ans_look_count %>" />
+     <input type="hidden" name="miss_count" value="<%= $miss_count %>" />
 % for my $e ( @{ $english } ) {
      <h2><%= $e->{no} %></h2>
      <div class="sentence">

@@ -196,10 +196,10 @@ sub review {
     my $cond;
 
     my $base = $builder->new_condition();
-    $base = $base->add(ans_look_count => {'>' => 0});
+    $base = $base->add(ans_look_count => {'>=' => 1});
 
     $cond = $builder->new_condition();
-    $cond->add(miss_count => {'>' => 1});
+    $cond->add(miss_count => {'>=' => 1});
     $base = $base->compose_or($cond);
 
     $cond = $builder->new_condition();
@@ -226,7 +226,6 @@ sub review {
 
     my $sql = $maker_select->as_sql;
     my @binds = @{$maker_select->bind};
-    warn $sql;
     my $dbh = $app->db->dbh;
     my $sth = $dbh->prepare($sql);
     $sth->execute(@binds);
@@ -242,7 +241,7 @@ sub review_log {
     my $row = $app->db->single('anslog', {id => $id});
 
     # ミスや解答確認の復習だったら、削除し、新しいログを残す
-    if ( $row->ans_look_count > 0 || $row->miss_count > 1 ) {
+    if ( $row->ans_look_count > 0 || $row->miss_count > 0 ) {
         $row->delete;
         Model::log($app, $section, $no, $ans_look_count, $miss_count);
     }

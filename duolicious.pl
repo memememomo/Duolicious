@@ -27,13 +27,9 @@ app->helper(
             my $dbi_config = $ENV{'CONFIG_DBI'} || $config->{'DBI'};
 
             my $handler = DBIx::Handler->new(@{$dbi_config});
-            my $schema = Teng::Schema::Loader->load(
+            my $db = Teng::Schema::Loader->load(
                 namespace => 'DB',
                 dbh       => $handler->dbh,
-            );
-            my $db = DB->new(
-                dbh    => $handler->dbh,
-                schema => $schema,
             );
             app->{db} = $db;
             app->{handler} = $handler;
@@ -271,8 +267,18 @@ any '/review' => sub {
         if ( Model::check_ans($self, $section, $no) ) {
             my $ans_look_count = $self->param('ans_look_count') || 0;
             my $miss_count     = $self->param('miss_count')     || 0;
-            Model::review_log($self, $id, $section, $no, $ans_look_count, $miss_count);
-            return $self->redirect_to('review/index');
+            if ( ! $ans_look_count ) {
+                Model::review_log($self, $id, $section, $no, $ans_look_count, $miss_count);
+                return $self->redirect_to('review/index');
+            }
+            $self->stash->{error} = 0;
+            $self->stash->{review} = 1;
+            $self->stash->{miss_count} = $miss_count;
+        }
+        else {
+            $self->stash->{miss_count} = $self->param('miss_count') + 1;
+            $self->stash->{error}  = 1;
+            $self->stash->{review} = 0;
         }
     }
     else {
@@ -280,15 +286,17 @@ any '/review' => sub {
         $id      = $row->{id};
         $section = $row->{section};
         $no      = $row->{no};
+        $self->stash->{error} = 0;
+        $self->stash->{review} = 0;
+        $self->stash->{miss_count} = 0;
     }
 
     $self->stash->{id}      = $id;
     $self->stash->{section} = $section;
     $self->stash->{no}      = $no;
+    $self->stash->{ans_look_count} = 0;
 
     my %filled = Model::create_question_forms($self, $section, $no);
-
-    $self->stash->{error} = 0;
 
     $self->render_filled_html(\%filled);
 } => 'review/index';

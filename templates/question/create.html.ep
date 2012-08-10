@@ -10,7 +10,7 @@
       <table class="table table-bordered">
 	<tr>
 	  <th>No.</th>
-	  <td><input type="text" name="number" size="4" /></td>
+	  <td><input type="text" name="number" class="input-mini" /></td>
 	</tr>
 	<% for my $q ( @{ $questions } ) { %>
 	<tr>
@@ -18,11 +18,11 @@
 	    <table class="table table-bordered">
 	      <tr>
 		<td align="right">日本語<%= $q->{no} %></td>
-		<td><input type="text" name="japanese_<%= $q->{no} %>" /></td>
+		<td><input type="text" name="japanese_<%= $q->{no} %>" class="input-xxlarge" /></td>
 	      </tr>
 	      <tr>
 		<td align="right">英語<%= $q->{no} %></td>
-		<td><input type="text" name="english_<%= $q->{no} %>" /></td>
+		<td><input type="text" name="english_<%= $q->{no} %>" class="input-xxlarge" /></td>
 	      </tr>
 	    </table>
 	    <input type="submit" name="delete_<%= $q->{no} %>" value="削除" />
